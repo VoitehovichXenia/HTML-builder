@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-
-fs.readFile(
+const { stdout } = require('process');
+const rs = fs.createReadStream(
   path.join(__dirname, 'text.txt'),
   'utf-8',
-  (error, data) => {
-    if (error) throw error;
-    console.log(data);
-  }
 );
+
+rs.on('data', chunk => {
+  stdout.write(chunk);
+});
