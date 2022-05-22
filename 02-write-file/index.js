@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 process.on('exit', () => {
-  stdout.write('Bye!');
+  stdout.write('Bye! Good luck!');
 });
 
 process.on('SIGINT', () => process.exit());
@@ -30,6 +30,6 @@ stdin.on('data', data => {
       err => {
         if (err) throw err;
       }
-    )
+    );
   }
 });
