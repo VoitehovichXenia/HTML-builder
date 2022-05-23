@@ -1,20 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-fs.exists(
-  path.join(__dirname, 'project-dist'),
-  exists => {
-    if (!exists) {
-      fs.mkdir(
-        path.join(__dirname, 'project-dist'),
-        err => {
-          if (err) throw err;
-        }
-      );
-    }
-  }
-);
-
 async function bundleHTML() {
   fs.open(
     path.join(__dirname, 'project-dist', 'index.html'),
@@ -113,12 +99,23 @@ async function copyDir(srcDir, targetDir) {
 }
 
 (async () => {
-  const isHTMLBundled = await bundleHTML();
-  const isStylesBundled = await bundleStyles();
-  const isDirCopy = await copyDir(
-    path.join(__dirname, 'assets'),
-    path.join(__dirname, 'project-dist', 'assets')
+  try {
+    await fs.promises.access(path.join(__dirname, 'project-dist'), fs.constants.F_OK);
+  } catch {
+    fs.mkdir(
+      path.join(__dirname, 'project-dist'),
+      err => {
+        if (err) throw err;
+      }
     );
+  } finally {
+    const isHTMLBundled = await bundleHTML();
+    const isStylesBundled = await bundleStyles();
+    const isDirCopy = await copyDir(
+      path.join(__dirname, 'assets'),
+      path.join(__dirname, 'project-dist', 'assets')
+      );
 
-  if (isHTMLBundled && isDirCopy && isStylesBundled) console.log('The created and copied files are at the project-dist folder');
+    if (isHTMLBundled && isDirCopy && isStylesBundled) console.log('The created and copied files are at the project-dist folder');
+  }
 })();
