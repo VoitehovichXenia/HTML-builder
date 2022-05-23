@@ -1,36 +1,35 @@
 const fs = require('fs');
 const path = require('path');
 
-function copyDir() {
-  fs.exists(
-    path.join(__dirname, 'files-copy'),
-    exists => {
-      if (!exists) {
-        fs.mkdir(
-          path.join(__dirname, 'files-copy'),
-          err => {
-            if (err) throw err;
-          }
-        );
-      }
-    }  
-  );
+(async function copyDir() {
+  try {
+    fs.promises.access(path.join(__dirname, 'files-copy'), fs.constants.F_OK);
+  } catch (err) {
+    if (err) console.log(err);
+  } finally {
+    await fs.promises.rm(
+      path.join(__dirname, 'files-copy'),
+      {recursive: true}
+    );
+  }
 
-  fs.readdir(
-    path.join(__dirname, 'files'),
-    (err, files) => {
-      if (err) throw err;
-      for (let i = 0; i < files.length; i++) {
-        fs.copyFile(
-          path.join(__dirname, 'files', files[i]),
-          path.join(__dirname, 'files-copy', files[i]),
-          err => {
-            if (err) throw err;
-          }
-        ); 
-      }
-    }
+  await fs.promises.mkdir(
+    path.join(__dirname, 'files-copy')
+  )
+
+  const files = await fs.promises.readdir(
+    path.join(__dirname, 'files')
   );  
-}
 
-copyDir();
+  for (let i = 0; i < files.length; i++) {
+    fs.copyFile(
+      path.join(__dirname, 'files', files[i]),
+      path.join(__dirname, 'files-copy', files[i]),
+      err => {
+        if (err) throw err;
+      }
+    ); 
+  }
+
+  return console.log('Directory was copied');
+})();
