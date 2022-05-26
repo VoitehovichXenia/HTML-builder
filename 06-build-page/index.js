@@ -101,14 +101,14 @@ async function copyDir(srcDir, targetDir) {
 (async () => {
   try {
     await fs.promises.access(path.join(__dirname, 'project-dist'), fs.constants.F_OK);
-  } catch {
-    fs.mkdir(
+    await fs.promises.rm(
       path.join(__dirname, 'project-dist'),
-      err => {
-        if (err) throw err;
-      }
+      {recursive: true}
     );
+  } catch (err) {
+    if (err) console.log('');
   } finally {
+    await fs.promises.mkdir(path.join(__dirname, 'project-dist'));
     const isHTMLBundled = await bundleHTML();
     const isStylesBundled = await bundleStyles();
     const isDirCopy = await copyDir(
