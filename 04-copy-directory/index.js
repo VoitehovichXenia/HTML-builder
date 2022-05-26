@@ -3,14 +3,13 @@ const path = require('path');
 
 (async function copyDir() {
   try {
-    fs.promises.access(path.join(__dirname, 'files-copy'), fs.constants.F_OK);
-  } catch (err) {
-    if (err) console.log(err);
-  } finally {
+    await fs.promises.access(path.join(__dirname, 'files-copy'), fs.constants.F_OK);
     await fs.promises.rm(
       path.join(__dirname, 'files-copy'),
       {recursive: true}
     );
+  } catch (err) {
+    if (err) console.log('');
   }
 
   await fs.promises.mkdir(
