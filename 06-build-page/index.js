@@ -79,8 +79,8 @@ async function copyDir(srcDir, targetDir) {
   let src, dst;
 
   for (let i = 0; i < files.length; i++) {
-    src = srcDir + '\\' + files[i];
-    dst = targetDir + '\\' + files[i];
+    src = path.resolve(srcDir, files[i]);
+    dst = path.resolve(targetDir, files[i]);
 
     const stat = await fs.promises.stat(src);
 
