@@ -14,7 +14,7 @@ const path = require('path');
 
   await fs.promises.mkdir(
     path.join(__dirname, 'files-copy')
-  )
+  );
 
   const files = await fs.promises.readdir(
     path.join(__dirname, 'files')

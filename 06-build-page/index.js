@@ -14,8 +14,8 @@ async function bundleHTML() {
     await fs.promises.readFile(
       path.join(__dirname, 'template.html'), 
       'utf-8'
-      )
-    ).toString();
+    )
+  ).toString();
 
   const templateTags = file.match(/\{\{[a-z]+\}\}/gm);
 
@@ -24,7 +24,7 @@ async function bundleHTML() {
     const templateHTML = await fs.promises.readFile(
       path.join(__dirname, 'components', `${tagName}.html`), 
       'utf-8'
-      );
+    );
     const temp = new RegExp (templateTags[i], 'gm');
 
     file = file.replace(temp, templateHTML);
@@ -47,7 +47,7 @@ async function bundleStyles() {
     err => {
       if (err) throw err;
     }
-  )
+  );
 
   for (let i = 0; i < files.length; i++) {
     const extension = path.extname(files[i]);
@@ -60,7 +60,7 @@ async function bundleStyles() {
         err => {
           if (err) throw err;
         }
-      )
+      );
     }
     
   }  
@@ -76,7 +76,7 @@ async function copyDir(srcDir, targetDir) {
         if (err) throw err;
       });
     }
-  })
+  });
   
   let src, dst;
 
@@ -114,7 +114,7 @@ async function copyDir(srcDir, targetDir) {
     const isDirCopy = await copyDir(
       path.join(__dirname, 'assets'),
       path.join(__dirname, 'project-dist', 'assets')
-      );
+    );
 
     if (isHTMLBundled && isDirCopy && isStylesBundled) console.log('The created and copied files are at the project-dist folder');
   }

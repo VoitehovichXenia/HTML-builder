@@ -4,7 +4,7 @@ const path = require('path');
 (async function bundleCSS() {
   const files = await fs.promises.readdir(
     path.join(__dirname, 'styles')
-  )
+  );
 
   fs.open(
     path.join(__dirname, 'project-dist', 'bundle.css'),
@@ -36,4 +36,3 @@ const path = require('path');
 
   return console.log('Styles was bundled');
 })();
-
