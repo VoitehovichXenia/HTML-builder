@@ -70,13 +70,11 @@ async function bundleStyles() {
   
 async function copyDir(srcDir, targetDir) {
   const files = await fs.promises.readdir(srcDir);
-  fs.exists(targetDir, exists => {
-    if (!exists) {
-      fs.mkdir(targetDir, err => {
-        if (err) throw err;
-      });
-    }
-  });
+  try {
+    await fs.promises.access(targetDir, fs.constants.F_OK)
+  } catch (err) {
+    await fs.promises.mkdir(targetDir);
+  }
   
   let src, dst;
 
